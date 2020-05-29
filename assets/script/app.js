@@ -1,7 +1,4 @@
-/*
- * Music app
- *
- */
+
 const searchForm = document.querySelector('#search-form');
 const searchResultEL = document.querySelector('#search-result-wrapper');
 const albumsEl = document.querySelector('#search-albums');
@@ -9,7 +6,7 @@ const artistsEl = document.querySelector('#search-artists');
 const tracksEl = document.querySelector('#search-tracks');
 const errorEl = document.querySelector('#search-error');
 
-// Fetch data based on query-string
+// Buscar data basada en query string
 const getData = async url => {
 	const response = await fetch(url, {
 		method: 'GET',
@@ -26,7 +23,7 @@ const getData = async url => {
 	return await response.json();
 };
 
-// Get search results for artists
+// resultado de busqueda artistas
 const searchArtists = async search => {
 	const artists = await getData(
 		`https://deezerdevs-deezer.p.rapidapi.com/search/artist?q=${search}`
@@ -38,7 +35,7 @@ const searchArtists = async search => {
 	return artists;
 };
 
-// Get search results for albums
+// resultado de busqueda albumes
 const searchAlbums = async search => {
 	const albums = await getData(
 		`https://deezerdevs-deezer.p.rapidapi.com/search/album?q=${search}`
@@ -50,7 +47,7 @@ const searchAlbums = async search => {
 	return albums;
 };
 
-// Get search results for tracks
+// resultado de busqueda temas
 const searchTracks = async search => {
 	const tracks = await getData(
 		`https://deezerdevs-deezer.p.rapidapi.com/search/track?q=${search}`
@@ -62,7 +59,7 @@ const searchTracks = async search => {
 	return tracks;
 };
 
-// Collect search results for artist, albums and tracks, limited to 5 items each
+// recolectar resultados totales , max 5 de cda uno
 const searchAll = async search => {
 	return {
 		artists: await searchArtists(`${search}&limit=5`),
@@ -71,14 +68,14 @@ const searchAll = async search => {
 	};
 };
 
-// Add search value to data-attribute
+// valor de busqueda data search
 const saveSearch = search => {
 	searchResultEL
 		.querySelectorAll('header a')
 		.forEach(a => a.setAttribute('data-search', search));
 };
 
-// Get all data related to specific artist
+//buscar toda la data -artista
 const getArtistInfo = async id => {
 	const artist = await getData(
 		`https://deezerdevs-deezer.p.rapidapi.com/artist/${id}`
@@ -94,12 +91,12 @@ const getArtistInfo = async id => {
 	return { artist, tracklist, albums };
 };
 
-// Get all data related to specific album
+// data de albumes
 const getAlbumInfo = async id => {
 	return await getData(`https://deezerdevs-deezer.p.rapidapi.com/album/${id}`);
 };
 
-// Render all artists related to search result
+// artistas relacionados
 const renderArtistResult = artist => {
 	artistsEl.querySelector('ul').innerHTML += `
 		<li class="list-group-item list-group-item-dark">
@@ -112,7 +109,7 @@ const renderArtistResult = artist => {
 		</li>`;
 };
 
-// Render all albums related to search result
+// albumes relacionados
 const renderAlbumResult = album => {
 	albumsEl.querySelector('ul').innerHTML += `
 		<li class="list-group-item list-group-item-dark">
@@ -125,7 +122,7 @@ const renderAlbumResult = album => {
 		</li>`;
 };
 
-// Render all tracks related to search result
+// temas relacionados
 const renderTrackResult = track => {
 	tracksEl.querySelector('ul').innerHTML += `
 		<li class="list-group-item list-group-item-dark">
@@ -140,9 +137,9 @@ const renderTrackResult = track => {
 		</li>`;
 };
 
-// Render tracklist used for artist & album info
+
 const renderTrackList = (tracks, el) => {
-	// Clear list
+
 	el.querySelector('ul').innerHTML = '';
 
 	// Add tracks to list
@@ -156,7 +153,7 @@ const renderTrackList = (tracks, el) => {
 	});
 };
 
-// Render album list
+//  album list
 const renderAlbumList = (albums, el) => {
 	albums.forEach(album => {
 		el.querySelector('#discography').innerHTML += `
@@ -168,7 +165,7 @@ const renderAlbumList = (albums, el) => {
 	});
 };
 
-// Render album info to page
+// info album
 const renderAlbumInfo = album => {
 	const { artist, genres, tracks } = album;
 	const albumEl = document.querySelector('#album');
@@ -183,11 +180,11 @@ const renderAlbumInfo = album => {
 
 	renderTrackList(tracks.data, albumEl);
 
-	// Display element
+// mostrar elemento
 	albumEl.classList.remove('d-none');
 };
 
-// Render artist info to page
+// info artista
 const renderArtistInfo = ({ artist, tracklist, albums }) => {
 	const artistEl = document.querySelector('#artist');
 	artistEl.querySelector('img').src = artist.picture_xl;
@@ -198,11 +195,11 @@ const renderArtistInfo = ({ artist, tracklist, albums }) => {
 	renderTrackList(tracklist.data, artistEl);
 	renderAlbumList(albums, artistEl);
 
-	// Display element
+	//muestra elemento
 	artistEl.classList.remove('d-none');
 };
 
-// Clear HTML elements
+// Clear HTML 
 const clearInfo = element => {
 	const elements = document.querySelectorAll(element);
 	elements.forEach(el => {
@@ -211,7 +208,7 @@ const clearInfo = element => {
 	});
 };
 
-// Add 'display none' to all section elements
+// Add 'display none' 
 const hideElements = () => {
 	console.log('applying d-none to sections');
 	document
@@ -272,7 +269,7 @@ searchForm.addEventListener('submit', e => {
 });
 
 document.querySelector('main').addEventListener('click', async e => {
-	// Prevent default action
+	// Prevent default 
 	e.preventDefault();
 
 	// Return if clicked element or parent element is not an a-tag
@@ -283,12 +280,12 @@ document.querySelector('main').addEventListener('click', async e => {
 	// Add 'display none' to all section elements
 	hideElements();
 
-	// Check if element has data attribute 'search'
+	// Check  'search'
 	if (e.target.dataset.search) {
 		const search = e.target.dataset.search;
 		const type = e.target.dataset.type;
 
-		// Get all search results based on type
+		//  all search results 
 		switch (type) {
 			case 'artist':
 				searchArtists(search)
@@ -308,12 +305,12 @@ document.querySelector('main').addEventListener('click', async e => {
 		}
 	}
 
-	// Check if element has data attribute 'artist'
+	// Check  'artist'
 	if (e.target.dataset.artist) {
 		// Remove previous info
 		clearInfo('.artist-info');
 
-		// Get artist info and render to page
+		// Get artist info
 		getArtistInfo(e.target.dataset.artist)
 			.then(renderArtistInfo)
 			.catch(handleError);
@@ -324,7 +321,7 @@ document.querySelector('main').addEventListener('click', async e => {
 		// Remove previous info
 		clearInfo('.album-info');
 
-		// Get album info and render to page
+		// Get album info 
 		getAlbumInfo(e.target.dataset.album)
 			.then(renderAlbumInfo)
 			.catch(handleError);
